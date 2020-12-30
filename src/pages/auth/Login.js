@@ -1,9 +1,9 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import {auth, googleAuthProvider} from '../../firebase'
 import {toast} from 'react-toastify'
 import {Button} from 'antd'
 import {GoogleOutlined, MailOutlined} from '@ant-design/icons';
-import {useDispatch} from 'react-redux'
+import {useDispatch,useSelector} from 'react-redux'
 import {Link} from 'react-router-dom'
 
 const Login = ({history}) => {
@@ -13,6 +13,12 @@ const Login = ({history}) => {
     const [loading,setLoading] = useState(false);
 
     let dispatch = useDispatch()
+
+    const {user} = useSelector((state)=>({...state}))
+    useEffect(()=>{
+        if( user && user.token )
+            history.push('/')
+    },[user])
 
     const handleGoogleLogin = async()=>{
         auth.signInWithPopup(googleAuthProvider)
