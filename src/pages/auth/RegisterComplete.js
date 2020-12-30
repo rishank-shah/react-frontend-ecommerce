@@ -9,22 +9,50 @@ const RegisterComplete = ({history}) => {
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
     
-    useState(()=>{
+    useEffect(()=>{
         setEmail(window.localStorage.getItem('emailForRegister'))
     },[])
 
     const handleSubmit = async(e) =>{
         e.preventDefault();
-        
+
+        if(!email || !password){
+            toast.error('Email and password is required')
+            return
+        }
+
+        if(password.length < 6){
+            toast.error('Password must be at least 6 characters long')
+            return
+        }
+
+        try{
+            const result = await auth.signInWithEmailLink(email,window.location.href) 
+
+            if(result.user.emailVerified){
+                window.localStorage.removeItem('emailForRegister')
+
+                let user = auth.currentUser
+
+                await user.updatePassword(password);
+
+                const idTokenResult = await user.getIdTokenResult()
+
+                history.push('/')
+            }
+
+        }catch(error){
+            toast.error(error.message)
+        }
     }
 
     const completeRegisterForm = () =>(
         <form onSubmit={handleSubmit}>
-            <div class="form-group">
+            <div className="form-group">
                 <input type="email" className="form-control" value={email} onChange={e=> setEmail(e.target.value)} disabled />
             </div>
 
-            <div class="form-group">
+            <div className="form-group">
                 <input type="password" className="form-control" value={password} onChange={e=> setPassword(e.target.value)} autoFocus placeholder="Enter password"/>
             </div>
 

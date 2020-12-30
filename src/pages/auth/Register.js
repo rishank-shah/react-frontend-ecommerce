@@ -22,9 +22,9 @@ const Register = () => {
 
     const registerForm = () =>(
         <form onSubmit={handleSubmit}>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Email address</label>
-                <input type="email" className="form-control" value={email} onChange={e=> setEmail(e.target.value)} autoFocus placeholder="name@example.com" />
+            <div className="form-group">
+                <label for="emailId">Email address</label>
+                <input id="emailId" type="email" className="form-control" value={email} onChange={e=> setEmail(e.target.value)} autoFocus placeholder="name@example.com" />
             </div>
 
             <button type="submit" className="mt-3 btn btn-raised btn-success btn-sm" >Register</button>
