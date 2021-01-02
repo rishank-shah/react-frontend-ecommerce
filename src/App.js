@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import ForgotPassword from './pages/auth/ForgotPassword'
 import {currentUser} from './api/ServerAuth'
 import History from './pages/user/History'
+import PrivateUserRoutes from './components/routes/PrivateUserRoutes'
 
 const  App = () =>{
 
@@ -53,7 +54,7 @@ const  App = () =>{
         <Route exact path="/register/complete" component={RegisterComplete} />
         <Route exact path="/forgot/password" component={ForgotPassword} />
 
-        <Route exact path="/user/history" component={History} />
+        <PrivateUserRoutes exact path="/user/history" component={History} />
     </Switch>
     </>
   )
