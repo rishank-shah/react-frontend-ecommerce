@@ -14,7 +14,9 @@ import {currentUser} from './api/ServerAuth'
 import History from './pages/user/History'
 import Password from './pages/user/Password'
 import Wishlist from './pages/user/Wishlist'
+import AdminDashboard from './pages/admin/AdminDashboard'
 import PrivateUserRoutes from './components/routes/PrivateUserRoutes'
+import PrivateAdminRoutes from './components/routes/PrivateAdminRoutes'
 
 const  App = () =>{
 
@@ -43,7 +45,7 @@ const  App = () =>{
       }
     })
     return ()=> unsubscribe();
-  },[])
+  },[dispatch])
 
   return(
     <>
@@ -59,6 +61,8 @@ const  App = () =>{
         <PrivateUserRoutes exact path="/user/history" component={History} />
         <PrivateUserRoutes exact path="/user/password" component={Password} />
         <PrivateUserRoutes exact path="/user/wishlist" component={Wishlist} />
+
+        <PrivateAdminRoutes exact path="/admin/dashboard" component={AdminDashboard} />
     </Switch>
     </>
   )
