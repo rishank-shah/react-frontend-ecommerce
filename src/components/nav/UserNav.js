@@ -2,9 +2,9 @@ import React from 'react'
 import { Link } from "react-router-dom";
 
 const UserNav = () =>(
-    <nav class="d-none d-md-block bg-light sidebar">
-        <div class="sidebar-sticky">
-            <ul class="nav flex-column">
+    <nav className="d-none d-md-block bg-light sidebar">
+        <div className="sidebar-sticky">
+            <ul className="nav flex-column">
                 <li className="nav-item">
                     <Link to='/user/history' className="nav-link" >History</Link>
                 </li>
