@@ -18,6 +18,7 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import PrivateUserRoutes from './components/routes/PrivateUserRoutes'
 import PrivateAdminRoutes from './components/routes/PrivateAdminRoutes'
 import CreateCategory from './pages/admin/category/CreateCategory'
+import UpdateCategory from './pages/admin/category/UpdateCategory'
 
 const  App = () =>{
 
@@ -65,6 +66,7 @@ const  App = () =>{
 
         <PrivateAdminRoutes exact path="/admin/dashboard" component={AdminDashboard} />
         <PrivateAdminRoutes exact path="/admin/category" component={CreateCategory} />
+        <PrivateAdminRoutes exact path="/admin/category/:slug" component={UpdateCategory} />
     </Switch>
     </>
   )

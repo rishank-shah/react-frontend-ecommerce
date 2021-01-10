@@ -39,6 +39,7 @@ const CreateCategory = () =>{
         createCategory(user.token,name)
         .then(res=>{
             setName('')
+            listCategoryOnLoad()
             toast.success(`Category (${res.data.name}) created`)
         })
         .catch(err=>{
