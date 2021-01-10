@@ -17,6 +17,7 @@ import Wishlist from './pages/user/Wishlist'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import PrivateUserRoutes from './components/routes/PrivateUserRoutes'
 import PrivateAdminRoutes from './components/routes/PrivateAdminRoutes'
+import CreateCategory from './pages/admin/category/CreateCategory'
 
 const  App = () =>{
 
@@ -63,6 +64,7 @@ const  App = () =>{
         <PrivateUserRoutes exact path="/user/wishlist" component={Wishlist} />
 
         <PrivateAdminRoutes exact path="/admin/dashboard" component={AdminDashboard} />
+        <PrivateAdminRoutes exact path="/admin/category" component={CreateCategory} />
     </Switch>
     </>
   )
