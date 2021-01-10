@@ -5,11 +5,13 @@ import {Link} from 'react-router-dom'
 import {useSelector} from 'react-redux'
 import {EditOutlined,DeleteOutlined} from '@ant-design/icons'
 import {getCategories,createCategory,removeCategory} from '../../../api/ServerCategory'
+import SearchForm from '../../../components/forms/SearchForm'
 
 const CreateCategory = () =>{
 
     const [name,setName] = useState('')
     const [categories,setCategories] = useState([])
+    const [searchText,setSearchText] = useState('')
 
     const {user} = useSelector((state)=>({...state}))
 
@@ -48,6 +50,8 @@ const CreateCategory = () =>{
         })
     }
 
+    const search = (key) => (c) => c.name.toLowerCase().includes(key)
+
     const categoryForm = () =>(
         <form onSubmit={handleSubmit} >
             <div className="form-group">
@@ -72,8 +76,11 @@ const CreateCategory = () =>{
                         {categoryForm()}
                     </div>
                     <div className="ml-5">
+                        <SearchForm searchText={searchText} setSearchText={setSearchText} />
+                    </div>
+                    <div className="ml-5">
                         <hr/>
-                        {categories.map((cat)=>(
+                        {categories.filter(search(searchText)).map((cat)=>(
                             <div key={cat._id} className="alert alert-primary">
                                 {cat.name}
                                 <span onClick={()=> handleDelete(cat.slug,cat.name)} className="btn btn-sm float-right"><DeleteOutlined className="text-danger" /></span>
