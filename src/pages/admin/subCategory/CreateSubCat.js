@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useCallback} from 'react'
 import {toast} from 'react-toastify'
 import AdminNav from '../../../components/nav/AdminNav'
 import {Link} from 'react-router-dom'
@@ -19,14 +19,14 @@ const CreateSubCat = () =>{
 
     const {user} = useSelector((state)=>({...state}))
 
-    const listCategoryOnLoad = () => getCategories().then(cat=> setCategories(cat.data))
+    const listCategoryOnLoad = useCallback(() => getCategories().then(cat=> setCategories(cat.data)),[setCategories])
 
-    const listSubCategoryOnLoad = () => getSubCategories().then(cat=> setSubCategories(cat.data))
+    const listSubCategoryOnLoad = useCallback(() => getSubCategories().then(cat=> setSubCategories(cat.data)),[setSubCategories])
 
     useEffect(()=>{
         listCategoryOnLoad()
         listSubCategoryOnLoad()
-    },[])
+    },[listCategoryOnLoad,listSubCategoryOnLoad])
 
     const handleDelete = (slug,name) =>{
         let confirm = window.confirm(`Are you sure you want to delete "${name}" Subcategory?`)

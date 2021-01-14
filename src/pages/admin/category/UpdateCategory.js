@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect, useCallback} from 'react'
 import {toast} from 'react-toastify'
 import AdminNav from '../../../components/nav/AdminNav'
 import {useSelector} from 'react-redux'
@@ -10,11 +10,11 @@ const UpdateCategory = ({history,match}) =>{
 
     const {user} = useSelector((state)=>({...state}))
 
+    const loadCategory = useCallback(() => getCategory(match.params.slug).then(cat=> setName(cat.data.name)),[match.params.slug,setName])
+
     useEffect(()=>{
         loadCategory()
-    },[])
-
-    const loadCategory = () => getCategory(match.params.slug).then(cat=> setName(cat.data.name))
+    },[loadCategory])
 
     const handleSubmit = (e) =>{
         e.preventDefault();
