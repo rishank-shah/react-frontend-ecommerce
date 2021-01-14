@@ -10,10 +10,10 @@ const AdminNav = () =>(
                 </li>
                 
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>Create</span>
+                    <span>CRUD</span>
                 </h6>
                 <li className="nav-item">
-                    <Link to='/admin/create/product' className="nav-link" >Product</Link>
+                    <Link to='/admin/product' className="nav-link" >Product</Link>
                 </li>
                 <li className="nav-item">
                     <Link to='/admin/category' className="nav-link" >Category</Link>
@@ -25,12 +25,12 @@ const AdminNav = () =>(
                     <Link to='/admin/coupons' className="nav-link" >Coupons</Link>
                 </li>
 
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                {/* <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                     <span>View/Update/Delete</span>
                 </h6>
                 <li className="nav-item">
                     <Link to='/admin/products' className="nav-link" >Products</Link>
-                </li>
+                </li> */}
 
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                     <span>Account</span>
