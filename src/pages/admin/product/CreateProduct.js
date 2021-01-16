@@ -1,8 +1,10 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect,useCallback} from 'react'
 import {toast} from 'react-toastify'
 import AdminNav from '../../../components/nav/AdminNav'
 import {useSelector} from 'react-redux'
 import {createProduct} from '../../../api/ServerProduct'
+import CreateProductForm from '../../../components/forms/CreateProductForm'
+import { getCategories,getSubcatgeoryByCategory } from "../../../api/ServerCategory";
 
 const initState = {
     title:'',
@@ -11,6 +13,7 @@ const initState = {
     categories:[],
     category:'',
     subcategories:[],
+    subcategoriesOptions:[],
     quantity:0,
     images:[],
     shipping:'',
@@ -23,21 +26,69 @@ const initState = {
 const CreateProduct = () =>{
 
     const [values,setValues] = useState(initState)
+    const [showSubcategory,setShowSubcategory] = useState(false)
     
     const {user} = useSelector((state)=>({...state}))
 
-    const {title,description,price,quantity,colors,brands} = values
+    const listCategoryOnLoad = useCallback(() => getCategories().then(cat=> setValues({
+        ...values,
+        categories:cat.data
+        // eslint-disable-next-line
+    })),[setValues])
+
+    useEffect(()=>{
+        listCategoryOnLoad()
+    },[listCategoryOnLoad])
+
+    const {title,brand,color,shipping,category} = values
 
     const handleSubmit = (e) =>{
         e.preventDefault()
+        if(!brand){
+            toast.error('Please select a valid brand')
+            return
+        }
+        if(!color){
+            toast.error('Please select a valid color')
+            return
+        }
+        if(!shipping){
+            toast.error('Please select a valid shipping')
+            return
+        }
+        if(!category){
+            toast.error('Please select a valid category')
+            return
+        }
         createProduct(user.token,values)
         .then((res)=>{
+            window.location.reload()
             toast.success(`Product ${res.data.title} created successfully`)
             setValues(initState)
         })
-        .catch(()=>
-            toast.error('Creating Product Failed')
-        )
+        .catch((err)=>{
+            const error = err.response.data.err
+            if(error.includes('E11000 duplicate key error collection'))
+                toast.error(`Product with name ${title} exists in database`)
+            else{
+                toast.error('Unexpected error while creating Product')
+            }
+        })
+    }
+
+    const handleCategoryChange = (e)=>{
+        e.preventDefault()
+        setValues({
+            ...values,
+            category:e.target.value
+        })
+        getSubcatgeoryByCategory(e.target.value)
+        .then(res=>{
+            setValues({
+                ...values,
+                subcategoriesOptions:res.data
+            })
+        })
     }
 
     const handleChange = (e) =>{
@@ -46,54 +97,6 @@ const CreateProduct = () =>{
             [e.target.name]:e.target.value
         })
     }
-
-    const productForm = () =>(
-        <form onSubmit={handleSubmit}>
-            <div className="form-group">
-                <label>Title</label>
-                <input type="text" name="title" className="form-control" value={title} onChange={handleChange}></input>
-            </div>
-            <div className="form-group">
-                <label>Description</label>
-                <input type="text" name="description" className="form-control" value={description} onChange={handleChange}></input>
-            </div>
-            <div className="form-group">
-                <label>Price</label>
-                <input type="number" name="price" className="form-control" value={price} onChange={handleChange}></input>
-            </div>
-            <div className="form-group">
-                <label>Shipping</label>
-                <select name="shipping" className="form-control" onChange={handleChange}>
-                    <option>Select One Option</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                </select>
-            </div>
-            <div className="form-group">
-                <label>Quantity</label>
-                <input type="number" name="quantity" className="form-control" value={quantity} onChange={handleChange}></input>
-            </div>
-            <div className="form-group">
-                <label>Color</label>
-                <select name="color" className="form-control" onChange={handleChange}>
-                    <option>Select One Color</option>
-                    {colors.map((c)=>(
-                        <option key={c} value={c}>{c}</option>
-                    ))}
-                </select>
-            </div>
-            <div className="form-group">
-                <label>Brand</label>
-                <select name="brand" className="form-control" onChange={handleChange}>
-                    <option>Select One brand</option>
-                    {brands.map((c)=>(
-                        <option key={c} value={c}>{c}</option>
-                    ))}
-                </select>
-            </div>
-            <button className="btn btn-outline-primary" type="submit">Save Product</button>
-        </form>
-    )
 
     return(
         <div className="container-fluid">
@@ -106,7 +109,7 @@ const CreateProduct = () =>{
                         <h4>
                             Create Product
                         </h4>
-                        {productForm()}
+                        <CreateProductForm handleSubmit={handleSubmit} handleChange={handleChange}  values={values} handleCategoryChange={handleCategoryChange} showSubcategory={showSubcategory} />
                     </div>
                     <div className="ml-5">
                         SEARCH
