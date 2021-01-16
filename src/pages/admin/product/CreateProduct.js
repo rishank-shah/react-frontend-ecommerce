@@ -62,6 +62,7 @@ const CreateProduct = () =>{
         }
         createProduct(user.token,values)
         .then((res)=>{
+            window.alert(`Product ${res.data.title} created successfully`)
             window.location.reload()
             toast.success(`Product ${res.data.title} created successfully`)
             setValues(initState)
@@ -86,8 +87,11 @@ const CreateProduct = () =>{
         .then(res=>{
             setValues({
                 ...values,
-                subcategoriesOptions:res.data
+                category:e.target.value,
+                subcategoriesOptions:res.data,
+                subcategories:[]
             })
+            setShowSubcategory(true)
         })
     }
 
@@ -109,7 +113,7 @@ const CreateProduct = () =>{
                         <h4>
                             Create Product
                         </h4>
-                        <CreateProductForm handleSubmit={handleSubmit} handleChange={handleChange}  values={values} handleCategoryChange={handleCategoryChange} showSubcategory={showSubcategory} />
+                        <CreateProductForm handleSubmit={handleSubmit} handleChange={handleChange}  values={values} handleCategoryChange={handleCategoryChange} showSubcategory={showSubcategory} setValues={setValues}/>
                     </div>
                     <div className="ml-5">
                         SEARCH

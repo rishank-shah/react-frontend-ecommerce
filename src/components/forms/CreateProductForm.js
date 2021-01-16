@@ -1,7 +1,9 @@
 import React from 'react'
+import { Select } from 'antd';
+const { Option } = Select;
 
-const CreateProductForm = ({handleChange,handleSubmit,values,handleCategoryChange,showSubcategory}) =>{ 
-    const {title,description,price,quantity,colors,brands,categories,subcategoriesOptions} = values
+const CreateProductForm = ({handleChange,handleSubmit,values,handleCategoryChange,showSubcategory,setValues}) =>{ 
+    const {title,description,price,quantity,colors,brands,categories,subcategoriesOptions,subcategories} = values
 
     return (
         <form onSubmit={handleSubmit}>
@@ -56,7 +58,16 @@ const CreateProductForm = ({handleChange,handleSubmit,values,handleCategoryChang
                     ))}
                 </select>
             </div>
-            {subcategoriesOptions ? subcategoriesOptions.length : 'no'}
+
+            { showSubcategory && <div className="mb-4">
+                <label>SubCategory</label>
+                <Select mode="multiple" style={{ width: '100%' }} placeholder="Select one SubSategory" onChange={e=>setValues({...values,subcategories:e})} optionLabelProp="label" value={subcategories}>
+                    {subcategoriesOptions.length && subcategoriesOptions.map((s)=>
+                        <Option key={s._id} value={s._id} label={s.name}>{s.name}</Option>
+                    )}
+                </Select>
+            </div>}
+
             <button className="btn btn-outline-primary" type="submit" disabled={!title || !description || !price || !quantity}>Save Product</button>
         </form>
     )
