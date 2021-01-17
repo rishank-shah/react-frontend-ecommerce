@@ -1,5 +1,6 @@
 import React from 'react'
 import { Select } from 'antd';
+import ImageUpload from  './ImageUpload'
 const { Option } = Select;
 
 const CreateProductForm = ({handleChange,handleSubmit,values,handleCategoryChange,showSubcategory,setValues}) =>{ 
@@ -15,6 +16,7 @@ const CreateProductForm = ({handleChange,handleSubmit,values,handleCategoryChang
                 <label>Description</label>
                 <input type="text" name="description" className="form-control" value={description} onChange={handleChange}></input>
             </div>
+            <ImageUpload values={values} setValues={setValues} />
             <div className="form-group">
                 <label>Price</label>
                 <input type="number" name="price" className="form-control" value={price} onChange={handleChange}></input>
