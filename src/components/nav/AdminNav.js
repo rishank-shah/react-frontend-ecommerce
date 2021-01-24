@@ -8,6 +8,10 @@ const AdminNav = () =>(
                 <li className="nav-item">
                     <Link to='/admin/dashboard' className="nav-link" >Dashboard</Link>
                 </li>
+
+                <li className="nav-item">
+                    <Link to='/admin/view/products' className="nav-link" >View Products</Link>
+                </li>
                 
                 <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                     <span>CRUD</span>

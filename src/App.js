@@ -22,6 +22,7 @@ import UpdateCategory from './pages/admin/category/UpdateCategory'
 import CreateSubCat from './pages/admin/subCategory/CreateSubCat'
 import UpdateSubCat from './pages/admin/subCategory/UpdateSubCat'
 import CreateProduct from './pages/admin/product/CreateProduct'
+import ViewProducts from './pages/admin/product/ViewProducts'
 
 const  App = () =>{
 
@@ -74,6 +75,7 @@ const  App = () =>{
         <PrivateAdminRoutes exact path="/admin/subcategory/:slug" component={UpdateSubCat} />
 
         <PrivateAdminRoutes exact path="/admin/product" component={CreateProduct} />
+        <PrivateAdminRoutes exact path="/admin/view/products" component={ViewProducts} />
     </Switch>
     </>
   )
