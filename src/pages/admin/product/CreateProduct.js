@@ -115,13 +115,6 @@ const CreateProduct = () =>{
                         </h4>
                         <CreateProductForm handleSubmit={handleSubmit} handleChange={handleChange}  values={values} handleCategoryChange={handleCategoryChange} showSubcategory={showSubcategory} setValues={setValues}/>
                     </div>
-                    <div className="ml-5">
-                        SEARCH
-                    </div>
-                    <div className="ml-5">
-                        <hr/>
-                        LIST
-                    </div>
                 </div>
             </div>
         </div>
