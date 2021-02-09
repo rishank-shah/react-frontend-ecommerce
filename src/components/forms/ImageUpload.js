@@ -85,7 +85,7 @@ const ImageUpload = ({values,setValues}) =>{
         <>
             <div className="form-group">
                 <span><label>Choose Images</label> {loading ? <LoadingOutlined className="ml-3 text-danger h3"/> : ""} </span>
-                <input className="form-control" type="file" multiple accept="images/*" onChange={uploadAndResize} />
+                <input className="form-control btn btn-primary" type="file" multiple accept="images/*" onChange={uploadAndResize} />
             </div>
             <div className="row ml-1 mb-4">
                 {values.images && values.images.map((image)=>(
