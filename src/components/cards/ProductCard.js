@@ -16,8 +16,8 @@ const ProductCard = ({product}) =>(
             <ShoppingCartOutlined />
         ]}
         >
-            <Meta title={product.title} description={product.description.length > 47 ? `${product.description.substring(0,47)}...` : product.description} />
-        </Card>
+        <Meta title={product.title} description={product.description.length > 47 ? `${product.description.substring(0,47)}...` : product.description} />
+    </Card>
 )
 
 export default ProductCard;
