@@ -17,15 +17,24 @@ const Login = ({history}) => {
 
     const {user} = useSelector((state)=>({...state}))
     useEffect(()=>{
-        if( user && user.token )
+        let intended = history.location.state
+        if (intended){return}
+        else if( user && user.token )
             history.push('/')
     },[user,history])
 
     const roleBasedRedirect = (res)=>{
-        if(res.data.role === 'user-role-admin'){
-            history.push('/admin/dashboard')
+
+        //if redirected field in url
+        let intended = history.location.state
+        if (intended){
+            history.push(intended.from)
         }else{
-            history.push('/user/history')
+            if(res.data.role === 'user-role-admin'){
+                history.push('/admin/dashboard')
+            }else{
+                history.push('/user/history')
+            }
         }
     }
 
