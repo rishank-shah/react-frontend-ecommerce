@@ -2,7 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 
 const ShowProductDetails = ({product}) =>{
-    const {price,description,category,subcategories,shipping,color,sold,brand,quantity} = product
+    const {price,category,subcategories,shipping,color,sold,brand,quantity} = product
     return(
         <ul className="list-group">
             <li className="list-group-item">

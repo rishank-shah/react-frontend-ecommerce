@@ -47,9 +47,9 @@ const UpdateProduct = ({match,history}) =>{
                 setSubOptions(sub.data)
             })
             let arr = []
-            res.data.subcategories.map(s=>{
+            res.data.subcategories.map(s=>
                 arr.push(s._id)
-            })
+            )
             setArrayOfSubIDs((prev)=>arr)
         })
 

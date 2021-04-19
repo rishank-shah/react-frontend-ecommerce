@@ -20,16 +20,13 @@ const Product = ({match}) =>{
     },[slug])
 
     useEffect(()=>{
-        console.table(product)
-        console.log(product.ratings)
         if (product.ratings && user){
             let existingRatingObj = product.ratings.find(
                 (rat) => rat.postedBy.toString() === user._id.toString()
               );
             existingRatingObj && setStar(existingRatingObj.star)
-            console.log("existingRatingObj",existingRatingObj.star)
         }
-    },[])
+    },[product,user])
 
     const onStarClick = (newRating,name)=>{
         setStar(newRating)

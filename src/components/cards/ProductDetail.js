@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card,Descriptions,Tabs} from 'antd'
+import {Card,Tabs} from 'antd'
 import {Link} from 'react-router-dom'
 import {HeartOutlined,ShoppingCartOutlined} from '@ant-design/icons'
 import { Carousel } from 'react-responsive-carousel';
@@ -8,6 +8,7 @@ import DefaultProduct from '../../components/img/DefaultProduct.jpg'
 import ShowProductDetails from './ShowProductDetails'
 import StarRatings from 'react-star-ratings';
 import RatingModal from '../modals/RatingModal'
+import {showAverageRatingFunction} from '../../functions/rating'
 
 const {TabPane} = Tabs
 
@@ -18,7 +19,7 @@ const ProductDetail = ({product,onStarClick,star}) =>{
             <div className="col-md-7">
                 {   images && images.length ?
                     (<Carousel showArrows={true} autoPlay infiniteLoop>
-                        { images && images.map((i)=><img src={i.url} key={i.public_id}></img>)}
+                        { images && images.map((i)=><img alt="not available" src={i.url} key={i.public_id}></img>)}
                     </Carousel>):
                     (<Card 
                         cover={
@@ -35,7 +36,7 @@ const ProductDetail = ({product,onStarClick,star}) =>{
                     <TabPane tab="More" key ="more">
                         <ul>
                             <li>
-                                See the source code on <a target="_blank" href="https://github.com/rishank-shah/react-frontend-ecommerce">GitHub</a> 
+                                See the source code on <a target="_blank" rel="noreferrer" href="https://github.com/rishank-shah/react-frontend-ecommerce">GitHub</a> 
                             </li>
                             <li>
                                 More Info
@@ -48,7 +49,8 @@ const ProductDetail = ({product,onStarClick,star}) =>{
                 </Tabs>
             </div>
             <div className="col-md-5">
-                <h2 className="text-center p-3">{title}</h2>
+                <h2 className="text-center pt-2">{title}</h2>
+                { product && product.ratings && product.ratings.length > 0 ? showAverageRatingFunction(product):<div className="text-center pb-3"><h6>No Rating Yet</h6></div>}
                 <Card
                     actions={[
                         <>
