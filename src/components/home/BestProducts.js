@@ -48,7 +48,7 @@ const  BestProducts = ({NUMBER_OF_PRODUCTS}) =>{
             <Pagination 
                 className="text-center mt-4"
                 current={page} 
-                total={(productsCount/3) * 10} 
+                total={(productsCount/4) * 10} 
                 onChange={(value)=>setPage(value)}
             />
         </>

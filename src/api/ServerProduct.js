@@ -55,3 +55,6 @@ export const starProduct = async (productId, star,authtoken) => {
     }
   );
 };
+
+export const getRelatedProduct = async (productId) =>
+  await axios.get(`${process.env.REACT_APP_API_URL}/product/related-products/${productId}`);

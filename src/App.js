@@ -25,6 +25,7 @@ import CreateProduct from './pages/admin/product/CreateProduct'
 import ViewProducts from './pages/admin/product/ViewProducts'
 import UpdateProduct from "./pages/admin/product/UpdateProduct";
 import Product from './pages/Product'
+import CategoryHome from './pages/category/CategoryHome'
 
 const  App = () =>{
 
@@ -81,6 +82,8 @@ const  App = () =>{
         <PrivateAdminRoutes exact path="/admin/update/product/:slug" component={UpdateProduct} />
 
         <Route exact path="/view/product/:slug" component={Product} />
+
+        <Route exact path="/category/:slug" component={CategoryHome} />
     </Switch>
     </>
   )
