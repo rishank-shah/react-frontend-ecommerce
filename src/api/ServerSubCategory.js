@@ -32,3 +32,6 @@ export const createSubCategory = async(authtoken,subcategory,parent) =>
             authtoken:authtoken
         }
     })
+
+export const getSubCategoryAndProducts = async (slug,page) =>
+    await axios.post(`${process.env.REACT_APP_API_URL}/subcategory/products/${slug}`,{page});
