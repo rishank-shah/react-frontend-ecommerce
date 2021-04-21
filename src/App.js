@@ -27,6 +27,8 @@ import UpdateProduct from "./pages/admin/product/UpdateProduct";
 import Product from './pages/Product'
 import CategoryHome from './pages/category/CategoryHome'
 import SubCategoryHome from './pages/subcategory/SubCategoryHome'
+import UpdatePassword from './pages/admin/UpdatePassword'
+import AllProductsShop from './pages/AllProductsShop'
 
 const  App = () =>{
 
@@ -82,11 +84,15 @@ const  App = () =>{
         <PrivateAdminRoutes exact path="/admin/view/products" component={ViewProducts} />
         <PrivateAdminRoutes exact path="/admin/update/product/:slug" component={UpdateProduct} />
 
+        <PrivateAdminRoutes exact path="/admin/update/password" component={UpdatePassword} />
+
         <Route exact path="/view/product/:slug" component={Product} />
 
         <Route exact path="/category/:slug" component={CategoryHome} />
 
         <Route exact path="/sub-category/:slug" component={SubCategoryHome} />
+
+        <Route exact path="/all-products/shop" component={AllProductsShop} />
     </Switch>
     </>
   )

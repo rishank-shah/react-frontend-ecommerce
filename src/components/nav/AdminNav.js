@@ -41,7 +41,7 @@ const AdminNav = () =>(
                 </h6>
 
                 <li className="nav-item">
-                    <Link to='/user/password' className="nav-link" >Update Password</Link>
+                    <Link to='/admin/update/password' className="nav-link" >Update Password</Link>
                 </li>
             </ul>
         </div>

@@ -13,7 +13,7 @@ const ProductCard = ({product}) =>{
             { product && product.ratings && product.ratings.length > 0 ? showAverageRatingFunction(product):<div className="text-center pb-3"><h6>No Rating Yet</h6></div>}
             <Card
                 hoverable
-                className="mt-1"
+                className="mb-4"
                 cover={<img className="p-2" style={{ height: "250px", objectFit:'cover'}} alt="not available" src={product.images && product.images.length? product.images[0].url : DefaultProduct} />}
                 actions={[
                     <Link to={`/view/product/${product.slug}`} ><EyeOutlined className="text-primary"/></Link>,

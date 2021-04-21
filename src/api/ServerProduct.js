@@ -33,11 +33,12 @@ export const removeProduct = async (authtoken, slug) =>
 export const readProduct = async (slug) =>
   await axios.get(`${process.env.REACT_APP_API_URL}/product/${slug}`);
 
-export const getProducts = async (sort, order, page) => {
+export const getProducts = async (sort, order, page,limit) => {
   return await axios.post(`${process.env.REACT_APP_API_URL}/products`, {
     sort,
     order,
     page,
+    limit:limit || 4
   });
 };
 
