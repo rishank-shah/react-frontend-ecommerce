@@ -61,3 +61,10 @@ export const getRelatedProduct = async (productId) =>
   await axios.get(
     `${process.env.REACT_APP_API_URL}/product/related-products/${productId}`
   );
+
+export const searchFilterProduct = async (queries) => {
+  return await axios.post(
+    `${process.env.REACT_APP_API_URL}/product/search-filter`,
+    queries
+  );
+};

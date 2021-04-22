@@ -24,7 +24,7 @@ const NavBarSearch = () => {
 
   return (
     <div className="row">
-      <form className="form-inline form-inline-sm my-5 my-lg-2" onSubmit={handleSubmit}>
+      <form className="my-5 my-lg-2" onSubmit={handleSubmit}>
         <input
           onChange={handleChange}
           className="form-control mr-sm-2"
@@ -33,7 +33,11 @@ const NavBarSearch = () => {
           placeholder="Search"
         />
       </form>
-      <SearchOutlined onClick={handleSubmit} className="mt-3 mr-3" style={{ cursor: "pointer" }} />
+      <SearchOutlined
+        onClick={handleSubmit}
+        className="mt-3 mr-3"
+        style={{ cursor: "pointer" }}
+      />
     </div>
   );
 };
