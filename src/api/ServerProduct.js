@@ -33,19 +33,19 @@ export const removeProduct = async (authtoken, slug) =>
 export const readProduct = async (slug) =>
   await axios.get(`${process.env.REACT_APP_API_URL}/product/${slug}`);
 
-export const getProducts = async (sort, order, page,limit) => {
+export const getProducts = async (sort, order, page, limit) => {
   return await axios.post(`${process.env.REACT_APP_API_URL}/products`, {
     sort,
     order,
     page,
-    limit:limit || 4
+    limit: limit || 4,
   });
 };
 
 export const getProductsCount = async () =>
   await axios.get(`${process.env.REACT_APP_API_URL}/product/total/count`);
 
-export const starProduct = async (productId, star,authtoken) => {
+export const starProduct = async (productId, star, authtoken) => {
   return await axios.put(
     `${process.env.REACT_APP_API_URL}/product/star/${productId}`,
     { star },
@@ -58,4 +58,6 @@ export const starProduct = async (productId, star,authtoken) => {
 };
 
 export const getRelatedProduct = async (productId) =>
-  await axios.get(`${process.env.REACT_APP_API_URL}/product/related-products/${productId}`);
+  await axios.get(
+    `${process.env.REACT_APP_API_URL}/product/related-products/${productId}`
+  );

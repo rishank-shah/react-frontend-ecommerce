@@ -44,5 +44,8 @@ export const getSubcatgeoryByCategory = async (id) =>
     `${process.env.REACT_APP_API_URL}/category/subcategories/${id}`
   );
 
-export const getCategoryAndProducts = async (slug,page) =>
-  await axios.post(`${process.env.REACT_APP_API_URL}/category/products/${slug}`,{page});
+export const getCategoryAndProducts = async (slug, page) =>
+  await axios.post(
+    `${process.env.REACT_APP_API_URL}/category/products/${slug}`,
+    { page }
+  );
