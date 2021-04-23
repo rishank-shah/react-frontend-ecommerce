@@ -23,6 +23,8 @@ const AllProductsShop = () => {
   const [ok, setOk] = useState(false);
   const [categories, setCategories] = useState([]);
   const [optionCategoryID, setOptionCategoryID] = useState([]);
+  const [star, setStar] = useState(0);
+  const [showClearButton,setShowClearButton] = useState(false)
 
   const { search } = useSelector((state) => ({ ...state }));
   const { text } = search;
@@ -36,6 +38,7 @@ const AllProductsShop = () => {
         setProducts(res.data);
         setLoading(false);
         setShowPagination(true);
+        setShowClearButton(false)
       }
     );
   };
@@ -61,6 +64,7 @@ const AllProductsShop = () => {
       filterProducts({ search_query: text });
     }, 300);
     return () => clearTimeout(delay);
+    // eslint-disable-next-line
   }, [text]);
 
   const filterProducts = (args) => {
@@ -71,6 +75,7 @@ const AllProductsShop = () => {
         } else {
           setShowPagination(false);
           setProducts(res.data);
+          setShowClearButton(true)
         }
       });
     } else {
@@ -80,6 +85,7 @@ const AllProductsShop = () => {
 
   useEffect(() => {
     priceRangeFilter({ price });
+    // eslint-disable-next-line
   }, [ok]);
 
   const handleSlider = (value) => {
@@ -87,6 +93,7 @@ const AllProductsShop = () => {
       type: "SEARCH_QUERY",
       payload: { text: "" },
     });
+    setStar(0);
     setOptionCategoryID([]);
     setPrice(value);
     setTimeout(() => {
@@ -102,12 +109,12 @@ const AllProductsShop = () => {
         } else {
           setShowPagination(false);
           setProducts(res.data);
+          setShowClearButton(true)
         }
       });
     } else {
       setProducts([]);
       setShowPagination(false);
-      setProductsCount(0);
     }
   };
 
@@ -117,6 +124,7 @@ const AllProductsShop = () => {
       type: "SEARCH_QUERY",
       payload: { text: "" },
     });
+    setStar(0);
     let previousStateCategories = [...optionCategoryID];
     let selectedNow = e.target.value;
     let ifInState = previousStateCategories.indexOf(selectedNow);
@@ -134,6 +142,30 @@ const AllProductsShop = () => {
         } else {
           setShowPagination(false);
           setProducts(res.data);
+          setShowClearButton(true)
+        }
+      });
+    } else {
+      loadDefaultProductOnLoad();
+    }
+  };
+
+  const handleStarClicked = (num) => {
+    setPrice([0, 0]);
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setOptionCategoryID([]);
+    setStar(num);
+    if (num > 0) {
+      searchFilterProduct({ numberOfStars: num }).then((res) => {
+        if (res.data.error) {
+          console.log(res.data);
+        } else {
+          setShowPagination(false);
+          setProducts(res.data);
+          setShowClearButton(true)
         }
       });
     } else {
@@ -163,6 +195,18 @@ const AllProductsShop = () => {
     );
   };
 
+  const clearAllFilters = ()=>{
+    setPrice([0, 0]);
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setOptionCategoryID([]);
+    setStar(0)
+    setShowClearButton(false)
+    loadDefaultProductOnLoad()
+  }
+
   return (
     <>
       <div className="container-fluid">
@@ -174,6 +218,9 @@ const AllProductsShop = () => {
               categories={categories}
               handleCategoryChange={handleCategoryChange}
               optionCategoryID={optionCategoryID}
+              handleStarClicked={handleStarClicked}
+              clearAllFilters = {clearAllFilters}
+              showClearButton = {showClearButton}
             />
           </div>
           <div className="col-md-9">
@@ -183,7 +230,9 @@ const AllProductsShop = () => {
                 ading
               </h3>
             ) : (
-              <h3 className="text-center mt-5 p-3 mb-5 jumbotron">Product's</h3>
+              <h3 className="text-center mt-5 p-3 mb-5 jumbotron">
+                Product's {star > 0 ? ` filtered by ${star} stars` : ""}
+              </h3>
             )}
             {productsCount < 1 || products.length <= 0 ? (
               <p className="text-center text-danger">No Product Found</p>
