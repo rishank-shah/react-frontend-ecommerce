@@ -10,21 +10,35 @@ import ProductCard from "../components/cards/ProductCard";
 import { LoadingOutlined } from "@ant-design/icons";
 import ProductFilterMenu from "../components/menu/ProductFilterMenu";
 import { getCategories } from "../api/ServerCategory";
+import { getSubCategories } from "../api/ServerSubCategory";
 
 const NUMBER_OF_PRODUCTS_ON_PAGE = 9;
 
 const AllProductsShop = () => {
+  const [showClearButton, setShowClearButton] = useState(false);
   const [products, setProducts] = useState([]);
+
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [productsCount, setProductsCount] = useState(0);
   const [showPagination, setShowPagination] = useState(false);
+
   const [price, setPrice] = useState([0, 0]);
   const [ok, setOk] = useState(false);
+
   const [categories, setCategories] = useState([]);
   const [optionCategoryID, setOptionCategoryID] = useState([]);
+
   const [star, setStar] = useState(0);
-  const [showClearButton,setShowClearButton] = useState(false)
+
+  const [subCategories, setSubCategories] = useState([]);
+  const [subCatClicked, setSubCatClicked] = useState({});
+
+  const [brandClicked, setBrandClicked] = useState("");
+
+  const [colorClicked, setColorClicked] = useState("");
+
+  const [shippingClicked, setShippingClicked] = useState("");
 
   const { search } = useSelector((state) => ({ ...state }));
   const { text } = search;
@@ -38,7 +52,7 @@ const AllProductsShop = () => {
         setProducts(res.data);
         setLoading(false);
         setShowPagination(true);
-        setShowClearButton(false)
+        setShowClearButton(false);
       }
     );
   };
@@ -47,8 +61,13 @@ const AllProductsShop = () => {
     getCategories().then((res) => setCategories(res.data));
   };
 
+  const loadSubCategories = () => {
+    getSubCategories().then((res) => setSubCategories(res.data));
+  };
+
   useEffect(() => {
     loadCategories();
+    loadSubCategories();
   }, []);
 
   useEffect(() => {
@@ -75,7 +94,7 @@ const AllProductsShop = () => {
         } else {
           setShowPagination(false);
           setProducts(res.data);
-          setShowClearButton(true)
+          setShowClearButton(true);
         }
       });
     } else {
@@ -96,6 +115,10 @@ const AllProductsShop = () => {
     setStar(0);
     setOptionCategoryID([]);
     setPrice(value);
+    setBrandClicked("");
+    setSubCatClicked({});
+    setColorClicked("");
+    setShippingClicked("");
     setTimeout(() => {
       setOk(!ok);
     }, 300);
@@ -109,7 +132,7 @@ const AllProductsShop = () => {
         } else {
           setShowPagination(false);
           setProducts(res.data);
-          setShowClearButton(true)
+          setShowClearButton(true);
         }
       });
     } else {
@@ -125,6 +148,10 @@ const AllProductsShop = () => {
       payload: { text: "" },
     });
     setStar(0);
+    setSubCatClicked({});
+    setBrandClicked("");
+    setColorClicked("");
+    setShippingClicked("");
     let previousStateCategories = [...optionCategoryID];
     let selectedNow = e.target.value;
     let ifInState = previousStateCategories.indexOf(selectedNow);
@@ -142,7 +169,7 @@ const AllProductsShop = () => {
         } else {
           setShowPagination(false);
           setProducts(res.data);
-          setShowClearButton(true)
+          setShowClearButton(true);
         }
       });
     } else {
@@ -157,6 +184,10 @@ const AllProductsShop = () => {
       payload: { text: "" },
     });
     setOptionCategoryID([]);
+    setSubCatClicked({});
+    setBrandClicked("");
+    setColorClicked("");
+    setShippingClicked("");
     setStar(num);
     if (num > 0) {
       searchFilterProduct({ numberOfStars: num }).then((res) => {
@@ -165,12 +196,104 @@ const AllProductsShop = () => {
         } else {
           setShowPagination(false);
           setProducts(res.data);
-          setShowClearButton(true)
+          setShowClearButton(true);
         }
       });
     } else {
       loadDefaultProductOnLoad();
     }
+  };
+
+  const handleSubCategoryChange = (subCategoryClicked) => {
+    setPrice([0, 0]);
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setOptionCategoryID([]);
+    setStar(0);
+    setSubCatClicked(subCategoryClicked);
+    setBrandClicked("");
+    setShippingClicked("");
+    setColorClicked("");
+    searchFilterProduct({ subCategories: subCategoryClicked }).then((res) => {
+      if (res.data.error) {
+        console.log(res.data);
+      } else {
+        setShowPagination(false);
+        setProducts(res.data);
+        setShowClearButton(true);
+      }
+    });
+  };
+
+  const handleBrandChange = (e) => {
+    setBrandClicked(e.target.value);
+    setPrice([0, 0]);
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setOptionCategoryID([]);
+    setStar(0);
+    setSubCatClicked({});
+    setShippingClicked("");
+    setColorClicked("");
+    searchFilterProduct({ brand: e.target.value }).then((res) => {
+      if (res.data.error) {
+        console.log(res.data);
+      } else {
+        setShowPagination(false);
+        setProducts(res.data);
+        setShowClearButton(true);
+      }
+    });
+  };
+
+  const handleColorChange = (e) => {
+    setColorClicked(e.target.value);
+    setBrandClicked("");
+    setPrice([0, 0]);
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setOptionCategoryID([]);
+    setStar(0);
+    setSubCatClicked({});
+    setShippingClicked("");
+    searchFilterProduct({ color: e.target.value }).then((res) => {
+      if (res.data.error) {
+        console.log(res.data);
+      } else {
+        setShowPagination(false);
+        setProducts(res.data);
+        setShowClearButton(true);
+      }
+    });
+  };
+
+  const handleShippingChange = (e) => {
+    setShippingClicked(e.target.value);
+    setColorClicked("");
+    setBrandClicked("");
+    setPrice([0, 0]);
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setOptionCategoryID([]);
+    setStar(0);
+    setSubCatClicked({});
+    searchFilterProduct({ shipping: e.target.value }).then((res) => {
+      if (res.data.error) {
+        console.log(res.data);
+      } else {
+        setShowPagination(false);
+        setProducts(res.data);
+        setShowClearButton(true);
+      }
+    });
   };
 
   const showProducts = () => {
@@ -195,17 +318,21 @@ const AllProductsShop = () => {
     );
   };
 
-  const clearAllFilters = ()=>{
+  const clearAllFilters = () => {
     setPrice([0, 0]);
     dispatch({
       type: "SEARCH_QUERY",
       payload: { text: "" },
     });
     setOptionCategoryID([]);
-    setStar(0)
-    setShowClearButton(false)
-    loadDefaultProductOnLoad()
-  }
+    setStar(0);
+    setSubCatClicked({});
+    setShowClearButton(false);
+    setBrandClicked("");
+    setColorClicked("");
+    setShippingClicked("");
+    loadDefaultProductOnLoad();
+  };
 
   return (
     <>
@@ -219,8 +346,16 @@ const AllProductsShop = () => {
               handleCategoryChange={handleCategoryChange}
               optionCategoryID={optionCategoryID}
               handleStarClicked={handleStarClicked}
-              clearAllFilters = {clearAllFilters}
-              showClearButton = {showClearButton}
+              clearAllFilters={clearAllFilters}
+              showClearButton={showClearButton}
+              subCategories={subCategories}
+              handleSubCategoryChange={handleSubCategoryChange}
+              handleBrandChange={handleBrandChange}
+              brandClicked={brandClicked}
+              handleColorChange={handleColorChange}
+              colorClicked={colorClicked}
+              handleShippingChange={handleShippingChange}
+              shippingClicked={shippingClicked}
             />
           </div>
           <div className="col-md-9">
@@ -231,7 +366,19 @@ const AllProductsShop = () => {
               </h3>
             ) : (
               <h3 className="text-center mt-5 p-3 mb-5 jumbotron">
-                Product's {star > 0 ? ` filtered by ${star} stars` : ""}
+                Product's {star > 0 ? ` filtered by ${star} stars` : ""}{" "}
+                {subCatClicked !== undefined && subCatClicked.name !== undefined
+                  ? ` filtered by ${subCatClicked.name} SubCategory`
+                  : ""}
+                {brandClicked && brandClicked !== ""
+                  ? ` filtered by ${brandClicked} Brand`
+                  : ""}
+                {colorClicked && colorClicked !== ""
+                  ? ` filtered by ${colorClicked} Color`
+                  : ""}
+                {shippingClicked && shippingClicked !== ""
+                  ? ` filtered by Shipping option: ${shippingClicked}`
+                  : ""}
               </h3>
             )}
             {productsCount < 1 || products.length <= 0 ? (

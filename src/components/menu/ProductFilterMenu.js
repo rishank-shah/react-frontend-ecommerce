@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Slider, Checkbox } from "antd";
+import { Menu, Slider, Checkbox, Radio } from "antd";
 import {
   DollarOutlined,
   DownSquareOutlined,
@@ -8,7 +8,7 @@ import {
 } from "@ant-design/icons";
 import StarRattingMenu from "./StarRattingMenu";
 
-const { SubMenu, ItemGroup } = Menu;
+const { SubMenu } = Menu;
 
 const ProductFilterMenu = ({
   price,
@@ -19,7 +19,29 @@ const ProductFilterMenu = ({
   handleStarClicked,
   clearAllFilters,
   showClearButton,
+  subCategories,
+  handleSubCategoryChange,
+  handleBrandChange,
+  brandClicked,
+  handleColorChange,
+  colorClicked,
+  handleShippingChange,
+  shippingClicked,
 }) => {
+  const brandOptions = [
+    "HP",
+    "Asus",
+    "Dell",
+    "Apple",
+    "Lenovo",
+    "Samsung",
+    "Microsoft",
+  ];
+
+  const colorOptions = ["Black", "White", "Brown", "Blue", "Silver", "Gold"];
+
+  const shippingOptions = ["Yes", "No"];
+
   const showCategoriesList = () =>
     categories.map((cat) => (
       <div key={cat._id}>
@@ -46,6 +68,66 @@ const ProductFilterMenu = ({
     </div>
   );
 
+  const showSubCategoriesList = () =>
+    subCategories.map((sub) => (
+      <div
+        key={sub._id}
+        onClick={() => handleSubCategoryChange(sub)}
+        className="p-1 m-1 badge badge-primary"
+        style={{ cursor: "pointer" }}
+      >
+        {sub.name}
+      </div>
+    ));
+
+  const showBrand = () =>
+    brandOptions.map((brand, i) => (
+      <div key={i}>
+        <Radio
+          onChange={handleBrandChange}
+          className="pb-2 pl-4 pr-4"
+          value={brand}
+          name="category"
+          checked={brand === brandClicked}
+        >
+          {brand}
+        </Radio>
+        <br />
+      </div>
+    ));
+
+  const showColor = () =>
+    colorOptions.map((color, i) => (
+      <div key={i}>
+        <Radio
+          onChange={handleColorChange}
+          className="pb-2 pl-4 pr-4"
+          value={color}
+          name="category"
+          checked={color === colorClicked}
+        >
+          {color}
+        </Radio>
+        <br />
+      </div>
+    ));
+
+  const showShipping = () =>
+    shippingOptions.map((shipping, i) => (
+      <div key={i}>
+        <Radio
+          onChange={handleShippingChange}
+          className="pb-2 pl-4 pr-4"
+          value={shipping}
+          name="category"
+          checked={shipping === shippingClicked}
+        >
+          {shipping}
+        </Radio>
+        <br />
+      </div>
+    ));
+
   return (
     <>
       <hr />
@@ -56,12 +138,12 @@ const ProductFilterMenu = ({
           <div className="text-center mt-3">
             <button onClick={clearAllFilters} className="btn btn-danger">
               <CloseOutlined />
-              Clear All Filters
+              Clear Filter
             </button>
           </div>
         </>
       )}
-      <Menu defaultOpenKeys={["price-silder", "ratting-filter"]} mode="inline">
+      <Menu defaultOpenKeys={["price-silder", "brand-filter"]} mode="inline">
         <hr />
         <SubMenu
           key="price-silder"
@@ -82,6 +164,20 @@ const ProductFilterMenu = ({
               max="150000"
             />
           </div>
+        </SubMenu>
+
+        <hr />
+
+        <SubMenu
+          key="brand-filter"
+          title={
+            <span className="h6">
+              <StarOutlined />
+              Brands
+            </span>
+          }
+        >
+          <div className="mt-1">{showBrand()}</div>
         </SubMenu>
 
         <hr />
@@ -110,6 +206,48 @@ const ProductFilterMenu = ({
           }
         >
           <div className="mt-1">{showCategoriesList()}</div>
+        </SubMenu>
+
+        <hr />
+
+        <SubMenu
+          key="sub-category-filter"
+          title={
+            <span className="h6">
+              <DownSquareOutlined />
+              SubCategory
+            </span>
+          }
+        >
+          <div className="mt-1 ml-4">{showSubCategoriesList()}</div>
+        </SubMenu>
+
+        <hr />
+
+        <SubMenu
+          key="color-filter"
+          title={
+            <span className="h6">
+              <DownSquareOutlined />
+              Color
+            </span>
+          }
+        >
+          <div className="mt-1">{showColor()}</div>
+        </SubMenu>
+
+        <hr />
+
+        <SubMenu
+          key="shipping-filter"
+          title={
+            <span className="h6">
+              <DownSquareOutlined />
+              Shipping Option
+            </span>
+          }
+        >
+          <div className="mt-1">{showShipping()}</div>
         </SubMenu>
 
         <hr />
