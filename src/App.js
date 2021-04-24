@@ -29,6 +29,7 @@ import CategoryHome from './pages/category/CategoryHome'
 import SubCategoryHome from './pages/subcategory/SubCategoryHome'
 import UpdatePassword from './pages/admin/UpdatePassword'
 import AllProductsShop from './pages/AllProductsShop'
+import UserCart from './pages/UserCart'
 
 const  App = () =>{
 
@@ -93,6 +94,8 @@ const  App = () =>{
         <Route exact path="/sub-category/:slug" component={SubCategoryHome} />
 
         <Route exact path="/all-products/shop" component={AllProductsShop} />
+
+        <Route exact path="/user/cart" component={UserCart} />
     </Switch>
     </>
   )
