@@ -38,6 +38,11 @@ const ProductCard = ({ product }) => {
         type: "ADD_TO_CART",
         payload: uniqueObj,
       });
+
+      dispatch({
+        type: "SHOW_DRAWER",
+        payload: true,
+      });
     }
   };
 

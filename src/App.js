@@ -1,69 +1,70 @@
-import React,{useEffect} from 'react'
-import {ToastContainer} from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import {Switch,Route} from 'react-router-dom'
-import Login from './pages/auth/Login' 
-import Register from './pages/auth/Register'
-import Home from './pages/Home'
-import Header from './components/nav/Header'
-import RegisterComplete from './pages/auth/RegisterComplete'
-import {auth} from './firebase'
+import React, { useEffect } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Switch, Route } from "react-router-dom";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import Home from "./pages/Home";
+import Header from "./components/nav/Header";
+import RegisterComplete from "./pages/auth/RegisterComplete";
+import { auth } from "./firebase";
 import { useDispatch } from "react-redux";
-import ForgotPassword from './pages/auth/ForgotPassword'
-import {currentUser} from './api/ServerAuth'
-import History from './pages/user/History'
-import Password from './pages/user/Password'
-import Wishlist from './pages/user/Wishlist'
-import AdminDashboard from './pages/admin/AdminDashboard'
-import PrivateUserRoutes from './components/routes/PrivateUserRoutes'
-import PrivateAdminRoutes from './components/routes/PrivateAdminRoutes'
-import CreateCategory from './pages/admin/category/CreateCategory'
-import UpdateCategory from './pages/admin/category/UpdateCategory'
-import CreateSubCat from './pages/admin/subCategory/CreateSubCat'
-import UpdateSubCat from './pages/admin/subCategory/UpdateSubCat'
-import CreateProduct from './pages/admin/product/CreateProduct'
-import ViewProducts from './pages/admin/product/ViewProducts'
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import { currentUser } from "./api/ServerAuth";
+import History from "./pages/user/History";
+import Password from "./pages/user/Password";
+import Wishlist from "./pages/user/Wishlist";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import PrivateUserRoutes from "./components/routes/PrivateUserRoutes";
+import PrivateAdminRoutes from "./components/routes/PrivateAdminRoutes";
+import CreateCategory from "./pages/admin/category/CreateCategory";
+import UpdateCategory from "./pages/admin/category/UpdateCategory";
+import CreateSubCat from "./pages/admin/subCategory/CreateSubCat";
+import UpdateSubCat from "./pages/admin/subCategory/UpdateSubCat";
+import CreateProduct from "./pages/admin/product/CreateProduct";
+import ViewProducts from "./pages/admin/product/ViewProducts";
 import UpdateProduct from "./pages/admin/product/UpdateProduct";
-import Product from './pages/Product'
-import CategoryHome from './pages/category/CategoryHome'
-import SubCategoryHome from './pages/subcategory/SubCategoryHome'
-import UpdatePassword from './pages/admin/UpdatePassword'
-import AllProductsShop from './pages/AllProductsShop'
-import UserCart from './pages/UserCart'
+import Product from "./pages/Product";
+import CategoryHome from "./pages/category/CategoryHome";
+import SubCategoryHome from "./pages/subcategory/SubCategoryHome";
+import UpdatePassword from "./pages/admin/UpdatePassword";
+import AllProductsShop from "./pages/AllProductsShop";
+import UserCart from "./pages/UserCart";
+import CartSideDrawer from "./components/drawer/CartSideDrawer";
 
-const  App = () =>{
+const App = () => {
+  const dispatch = useDispatch();
 
-  const dispatch = useDispatch()
-
-  useEffect(()=>{
-    const unsubscribe = auth.onAuthStateChanged(async(user)=>{
-      if(user){
-        const idTokenResult = await user.getIdTokenResult()
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const idTokenResult = await user.getIdTokenResult();
         currentUser(idTokenResult.token)
-        .then(res=>{
-        dispatch({
-          type:'LOGGED_IN_USER',
-          payload:{
-            name:res.data.name,
-            email:res.data.email,
-            token:idTokenResult.token,
-            role:res.data.role,
-            _id:res.data._id 
-          }
-        })
-        })
-        .catch(err=>{
-          console.log(err)
-        })
+          .then((res) => {
+            dispatch({
+              type: "LOGGED_IN_USER",
+              payload: {
+                name: res.data.name,
+                email: res.data.email,
+                token: idTokenResult.token,
+                role: res.data.role,
+                _id: res.data._id,
+              },
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
-    })
-    return ()=> unsubscribe();
-  },[dispatch])
+    });
+    return () => unsubscribe();
+  }, [dispatch]);
 
-  return(
+  return (
     <>
-      <Header/>
-      <ToastContainer/>
+      <Header />
+      <CartSideDrawer />
+      <ToastContainer />
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />
@@ -75,17 +76,53 @@ const  App = () =>{
         <PrivateUserRoutes exact path="/user/password" component={Password} />
         <PrivateUserRoutes exact path="/user/wishlist" component={Wishlist} />
 
-        <PrivateAdminRoutes exact path="/admin/dashboard" component={AdminDashboard} />
-        <PrivateAdminRoutes exact path="/admin/category" component={CreateCategory} />
-        <PrivateAdminRoutes exact path="/admin/category/:slug" component={UpdateCategory} />
-        <PrivateAdminRoutes exact path="/admin/subcategory" component={CreateSubCat} />
-        <PrivateAdminRoutes exact path="/admin/subcategory/:slug" component={UpdateSubCat} />
+        <PrivateAdminRoutes
+          exact
+          path="/admin/dashboard"
+          component={AdminDashboard}
+        />
+        <PrivateAdminRoutes
+          exact
+          path="/admin/category"
+          component={CreateCategory}
+        />
+        <PrivateAdminRoutes
+          exact
+          path="/admin/category/:slug"
+          component={UpdateCategory}
+        />
+        <PrivateAdminRoutes
+          exact
+          path="/admin/subcategory"
+          component={CreateSubCat}
+        />
+        <PrivateAdminRoutes
+          exact
+          path="/admin/subcategory/:slug"
+          component={UpdateSubCat}
+        />
 
-        <PrivateAdminRoutes exact path="/admin/product" component={CreateProduct} />
-        <PrivateAdminRoutes exact path="/admin/view/products" component={ViewProducts} />
-        <PrivateAdminRoutes exact path="/admin/update/product/:slug" component={UpdateProduct} />
+        <PrivateAdminRoutes
+          exact
+          path="/admin/product"
+          component={CreateProduct}
+        />
+        <PrivateAdminRoutes
+          exact
+          path="/admin/view/products"
+          component={ViewProducts}
+        />
+        <PrivateAdminRoutes
+          exact
+          path="/admin/update/product/:slug"
+          component={UpdateProduct}
+        />
 
-        <PrivateAdminRoutes exact path="/admin/update/password" component={UpdatePassword} />
+        <PrivateAdminRoutes
+          exact
+          path="/admin/update/password"
+          component={UpdatePassword}
+        />
 
         <Route exact path="/view/product/:slug" component={Product} />
 
@@ -96,9 +133,9 @@ const  App = () =>{
         <Route exact path="/all-products/shop" component={AllProductsShop} />
 
         <Route exact path="/user/cart" component={UserCart} />
-    </Switch>
+      </Switch>
     </>
-  )
-}
+  );
+};
 
 export default App;

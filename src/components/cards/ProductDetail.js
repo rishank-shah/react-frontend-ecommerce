@@ -35,9 +35,15 @@ const ProductDetail = ({ product, onStarClick, star }) => {
       let uniqueObj = _.uniqWith(cart, _.isEqual);
       localStorage.setItem("user_product_cart", JSON.stringify(uniqueObj));
       setToolTip("Added in Cart");
+
       dispatch({
         type: "ADD_TO_CART",
         payload: uniqueObj,
+      });
+
+      dispatch({
+        type: "SHOW_DRAWER",
+        payload: true,
       });
     }
   };
