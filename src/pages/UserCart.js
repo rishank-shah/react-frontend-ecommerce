@@ -2,8 +2,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import ProductCartCard from "../components/cards/ProductCartCard";
+import { userCartAPI } from "../api/ServerUser";
+import { toast } from "react-toastify";
 
-const UserCart = () => {
+const UserCart = ({ history }) => {
   const { user, cart } = useSelector((state) => ({ ...state }));
 
   const getTotalAmountFromCart = () => {
@@ -12,7 +14,17 @@ const UserCart = () => {
     }, 0);
   };
 
-  const checkoutCart = () => {};
+  const checkoutCart = () => {
+    userCartAPI(cart, user.token)
+      .then((res) => {
+        if (res.data.success) {
+          history.push("/user/checkout");
+        } else {
+          toast.error("Something went wrong");
+        }
+      })
+      .catch((err) => console.log("cart err", err));
+  };
 
   const showCartProducts = () => (
     <table className="table table-bordered">

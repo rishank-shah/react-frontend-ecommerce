@@ -31,6 +31,7 @@ import UpdatePassword from "./pages/admin/UpdatePassword";
 import AllProductsShop from "./pages/AllProductsShop";
 import UserCart from "./pages/UserCart";
 import CartSideDrawer from "./components/drawer/CartSideDrawer";
+import CartCheckout from './pages/CartCheckout'
 
 const App = () => {
   const dispatch = useDispatch();
@@ -133,6 +134,9 @@ const App = () => {
         <Route exact path="/all-products/shop" component={AllProductsShop} />
 
         <Route exact path="/user/cart" component={UserCart} />
+
+        <PrivateUserRoutes exact path="/user/checkout" component={CartCheckout} />
+
       </Switch>
     </>
   );
