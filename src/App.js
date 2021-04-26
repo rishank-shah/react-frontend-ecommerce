@@ -32,6 +32,7 @@ import AllProductsShop from "./pages/AllProductsShop";
 import UserCart from "./pages/UserCart";
 import CartSideDrawer from "./components/drawer/CartSideDrawer";
 import CartCheckout from './pages/CartCheckout'
+import CreateCoupon from './pages/admin/coupon/CreateCoupon'
 
 const App = () => {
   const dispatch = useDispatch();
@@ -123,6 +124,12 @@ const App = () => {
           exact
           path="/admin/update/password"
           component={UpdatePassword}
+        />
+
+        <PrivateAdminRoutes
+          exact
+          path="/admin/coupons"
+          component={CreateCoupon}
         />
 
         <Route exact path="/view/product/:slug" component={Product} />
