@@ -124,13 +124,13 @@ const ProductCartCard = ({ product }) => {
               ))}
           </select>
         </td>
-        <td className="text-center">
+        {/* <td className="text-center">
           {product.shipping === "No" ? (
             <CloseCircleFilled className="text-danger" />
           ) : (
             <CheckCircleFilled className="text-success" />
           )}
-        </td>
+        </td> */}
         <td className="text-center">
           <input
             type="number"

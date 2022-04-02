@@ -24,3 +24,15 @@ export const removeCoupon = async (authtoken, couponId) =>
 
 export const getCouponList = async () =>
   await axios.get(`${process.env.REACT_APP_API_URL}/coupon/list`);
+
+export const applyCouponUser = async (authtoken, coupon) => {
+  return await axios.post(
+    `${process.env.REACT_APP_API_URL}/coupon/apply-to-cart`,
+    { coupon },
+    {
+      headers: {
+        authtoken: authtoken,
+      },
+    }
+  );
+};

@@ -35,9 +35,9 @@ const UserCart = ({ history }) => {
           <th scope="col">Price</th>
           <th scope="col">Brand</th>
           <th scope="col">Color</th>
-          <th scope="col" style={{ width: "50px" }}>
+          {/* <th scope="col" style={{ width: "50px" }}>
             Shipping
-          </th>
+          </th> */}
           <th scope="col" style={{ width: "50px" }} className="text-center">
             Count
           </th>
@@ -46,8 +46,8 @@ const UserCart = ({ history }) => {
           </th>
         </tr>
       </thead>
-      {cart.map((product) => (
-        <ProductCartCard key={product._id} product={product} />
+      {cart.map((product, i) => (
+        <ProductCartCard key={`${product._id + i}`} product={product} />
       ))}
     </table>
   );

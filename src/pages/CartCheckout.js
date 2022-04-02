@@ -5,17 +5,19 @@ import {
   saveUserAddress,
   getUserAddress,
 } from "../api/ServerUser";
+import { applyCouponUser } from '../api/ServerCoupon'
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-const CartCheckout = () => {
+const CartCheckout = ({ history }) => {
   const [products, setProducts] = useState([]);
   const [cartTotal, setCartTotal] = useState(0);
   const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
   const [address, setAddress] = useState("");
   const [addressSaved, setAddressSaved] = useState(false);
+  const [coupon, setCoupon] = useState("")
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => ({ ...state }));
@@ -30,7 +32,7 @@ const CartCheckout = () => {
     });
     getUserAddress(user.token).then((res) => {
       setAddress(res.data.address);
-      if(address !== undefined && address !== ''){
+      if (res.data.address !== undefined && res.data.address !== '') {
         setAddressSaved(true)
       }
     });
@@ -39,13 +41,33 @@ const CartCheckout = () => {
   const saveAddress = () => {
     saveUserAddress(address, user.token).then((res) => {
       if (res.data.success) {
-        if(address !== undefined && address!==''){
+        if (address !== undefined && address !== '') {
           setAddressSaved(true);
           toast.success("Address Saved");
         }
       }
     });
   };
+
+  const applyCoupon = () => {
+    applyCouponUser(user.token, coupon)
+      .then(res => {
+        if (res.data.err) {
+          toast.error(res.data.err)
+          dispatch({
+            type: "COUPON_USED",
+            payload: false,
+          })
+        } else if (res.data.totalAfterDiscount) {
+          setTotalAfterDiscount(res.data.totalAfterDiscount)
+          toast.success(`Coupon applied succesfully. Total after discount is ${res.data.totalAfterDiscount}`)
+          dispatch({
+            type: "COUPON_USED",
+            payload: true,
+          })
+        }
+      })
+  }
 
   const handleDeleteCart = () => {
     if (typeof window !== "undefined") {
@@ -62,6 +84,7 @@ const CartCheckout = () => {
         setProducts([]);
         setCartTotal(0);
         setTotalAfterDiscount(0);
+        setCoupon("")
         toast.success("Cart Deleted");
       }
     });
@@ -87,10 +110,10 @@ const CartCheckout = () => {
         <hr />
         <h4 className="text-center mt-4">Discount Coupons</h4>
         <br />
-        <input type="text" className="form-control"></input>
+        <input value={coupon} onChange={e => setCoupon(e.target.value)} type="text" className="form-control"></input>
 
         <div className="text-center">
-          <button className="btn btn-success  mt-3">Apply Coupon</button>
+          <button onClick={applyCoupon} disabled={coupon.length <= 0} className="btn btn-success  mt-3">Apply Coupon</button>
         </div>
       </div>
 
@@ -126,6 +149,18 @@ const CartCheckout = () => {
                 </span>
               </td>
             </tr>
+            {totalAfterDiscount > 0 && (
+              <tr>
+                <td className="text-center h3 bg-success" colSpan="3">
+                  CartTotal After Discount
+                </td>
+                <td>
+                  <span className="text-success h4">
+                    <b>Rs {totalAfterDiscount}</b>
+                  </span>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
         <hr />
@@ -134,6 +169,7 @@ const CartCheckout = () => {
             <button
               className="btn btn-primary"
               disabled={!addressSaved || !products.length}
+              onClick={() => history.push("/payment")}
             >
               Place Order
             </button>

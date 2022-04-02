@@ -8,7 +8,7 @@ import {
   removeCoupon,
   getCouponList,
 } from "../../../api/ServerCoupon";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
 import AdminNav from "../../../components/nav/AdminNav";
 
 const CreateCoupon = () => {
@@ -30,20 +30,50 @@ const CreateCoupon = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createCoupon(user.token, {
-      name,
-      expiry,
-      discount,
-    })
-      .then((res) => {
-        setName("");
-        setExpiry('')
-        setDiscount(0)
-        toast.success(`Coupon (${res.data.name}) created`);
+    if (name.length < 6) {
+      toast.error("Name should be of 6 or more characters");
+    } else if (name.length > 12) {
+      toast.error("Name can be maximum 12 characters");
+    }else if (discount < 0 || discount > 100) {
+      toast.error("Discount should be between 0% to 100%");
+    } else {
+      setLoading(true);
+      createCoupon(user.token, {
+        name,
+        expiry,
+        discount,
       })
-      .catch((err) => {
-        if (err.response.status === 400) toast.error(err.response.data);
-      });
+        .then((res) => {
+          setName("");
+          setLoading(false);
+          setExpiry("");
+          setDiscount(0);
+          toast.success(`Coupon (${res.data.name}) created`);
+          getCouponList().then((res) => {
+            setCoupons(res.data);
+          });
+        })
+        .catch((err) => {
+          if (err.response.status === 400) toast.error(err.response.data);
+        });
+    }
+  };
+
+  const handleDeleteCoupon = (coupon_id) => {
+    if (window.confirm("Are you sure you want to delete this coupon?")) {
+      setLoading(true);
+      removeCoupon(user.token, coupon_id)
+        .then((res) => {
+          setLoading(false);
+          toast.success(`Deleted Coupon`);
+          getCouponList().then((res2) => {
+            setCoupons(res2.data);
+          });
+        })
+        .catch((err) => {
+          if (err.response.status === 400) toast.error(err.response.data);
+        });
+    }
   };
 
   const couponForm = () => (
@@ -71,7 +101,7 @@ const CreateCoupon = () => {
       </div>
       <div className="form-group">
         <label>Expiry</label>
-        <br/>
+        <br />
         <DatePicker
           selected={expiry || new Date()}
           className="form-control"
@@ -92,7 +122,14 @@ const CreateCoupon = () => {
         </div>
         <div className="col-9">
           <div className="ml-5 mt-3">
-            <h4>Create Coupon</h4>
+            <h4>
+              Create Coupon {"   "}{" "}
+              {loading ? (
+                <LoadingOutlined className="ml-3 text-danger h4" />
+              ) : (
+                ""
+              )}
+            </h4>
             {couponForm()}
           </div>
           <div className="ml-5">
@@ -100,14 +137,44 @@ const CreateCoupon = () => {
           </div>
           <div className="ml-5">
             <hr />
-            {coupons.map((cat) => (
-              <div key={cat._id} className="alert alert-primary">
-                {cat.name} - {cat.expiry} - {cat.discount}
-                <span className="btn btn-sm float-right">
-                  <DeleteOutlined className="text-danger" />
-                </span>
-              </div>
-            ))}
+            <h5 className="text-center">Total Coupons - {coupons.length}</h5>
+            <hr />
+
+            <table className="table table-bordered">
+              <thead className="thead-light">
+                <tr>
+                  <th className="text-center" scope="col">
+                    Name
+                  </th>
+                  <th className="text-center" scope="col">
+                    Expiry
+                  </th>
+                  <th className="text-center" scope="col">
+                    Discount
+                  </th>
+                  <th className="text-center" scope="col">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {coupons.map((coupon) => (
+                  <tr key={coupon._id}>
+                    <td className="text-center">{coupon.name}</td>
+                    <td className="text-center">
+                      {new Date(coupon.expiry).toLocaleDateString()}
+                    </td>
+                    <td className="text-center">{coupon.discount}</td>
+                    <td className="text-center">
+                      <DeleteOutlined
+                        className="text-danger pointer"
+                        onClick={() => handleDeleteCoupon(coupon._id)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

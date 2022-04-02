@@ -31,8 +31,9 @@ import UpdatePassword from "./pages/admin/UpdatePassword";
 import AllProductsShop from "./pages/AllProductsShop";
 import UserCart from "./pages/UserCart";
 import CartSideDrawer from "./components/drawer/CartSideDrawer";
-import CartCheckout from './pages/CartCheckout'
-import CreateCoupon from './pages/admin/coupon/CreateCoupon'
+import CartCheckout from "./pages/CartCheckout";
+import CreateCoupon from "./pages/admin/coupon/CreateCoupon";
+import Payment from "./pages/Payment";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -142,8 +143,18 @@ const App = () => {
 
         <Route exact path="/user/cart" component={UserCart} />
 
-        <PrivateUserRoutes exact path="/user/checkout" component={CartCheckout} />
+        <PrivateUserRoutes
+          exact
+          path="/user/checkout"
+          component={CartCheckout}
+        />
 
+        <PrivateUserRoutes
+          exact
+          path="/payment"
+          component={Payment}
+        />
+        
       </Switch>
     </>
   );
