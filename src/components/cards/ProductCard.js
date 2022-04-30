@@ -46,6 +46,29 @@ const ProductCard = ({ product }) => {
     }
   };
 
+  const actions = () => {
+    if (product.quantity < 1) {
+      return [
+        <Tooltip title={'Item is sold out. Click to view.'}>
+          <Link to={`/view/product/${product.slug}`}>
+            <EyeOutlined className="text-primary" />
+          </Link>
+        </Tooltip>
+      ]
+    } else {
+      return [
+        <Link to={`/view/product/${product.slug}`}>
+          <EyeOutlined className="text-primary" />
+        </Link>,
+        <Tooltip title={tooltip}>
+          <a onClick={handleAddToCart}>
+            <ShoppingCartOutlined className="text-secondary" />
+          </a>
+        </Tooltip>
+      ]
+    }
+  }
+
   return (
     <>
       {product && product.ratings && product.ratings.length > 0 ? (
@@ -70,16 +93,7 @@ const ProductCard = ({ product }) => {
             }
           />
         }
-        actions={[
-          <Link to={`/view/product/${product.slug}`}>
-            <EyeOutlined className="text-primary" />
-          </Link>,
-          <Tooltip title={tooltip}>
-            <a onClick={handleAddToCart}>
-              <ShoppingCartOutlined className="text-secondary" />
-            </a>
-          </Tooltip>,
-        ]}
+        actions={actions()}
       >
         <Meta
           title={`${product.title} - Rs ${product.price} `}

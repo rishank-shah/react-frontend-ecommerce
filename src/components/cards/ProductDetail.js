@@ -48,6 +48,62 @@ const ProductDetail = ({ product, onStarClick, star }) => {
     }
   };
 
+  const actions = () => {
+    if (product.quantity < 1) {
+      return [
+        <>
+          <Tooltip title={"Item is sold out"}>
+            <ShoppingCartOutlined className="text-success" />
+            <br />
+            Cannot add to cart
+          </Tooltip>
+        </>,
+        <Link to="/">
+          <HeartOutlined className="text-info" />
+          <br />
+          Add To WishList
+        </Link>,
+        <RatingModal>
+          <StarRatings
+            name={product._id}
+            numberOfStars={5}
+            rating={star}
+            changeRating={onStarClick}
+            isSelectable={true}
+            starRatedColor="red"
+          />
+        </RatingModal>,
+      ]
+    } else {
+      return [
+        <>
+          <Tooltip title={tooltip}>
+            <a onClick={handleAddToCart}>
+              <ShoppingCartOutlined className="text-success" />
+              <br />
+              Add To Cart
+            </a>
+          </Tooltip>
+        </>,
+        <Link to="/">
+          <HeartOutlined className="text-info" />
+          <br />
+          Add To WishList
+        </Link>,
+        <RatingModal>
+          <StarRatings
+            name={product._id}
+            numberOfStars={5}
+            rating={star}
+            changeRating={onStarClick}
+            isSelectable={true}
+            starRatedColor="red"
+          />
+        </RatingModal>,
+      ]
+    }
+  }
+
   return (
     <>
       <div className="col-md-7">
@@ -103,32 +159,7 @@ const ProductDetail = ({ product, onStarClick, star }) => {
           </div>
         )}
         <Card
-          actions={[
-            <>
-              <Tooltip title={tooltip}>
-                <a onClick={handleAddToCart}>
-                  <ShoppingCartOutlined className="text-success" />
-                  <br />
-                  Add To Cart
-                </a>
-              </Tooltip>
-            </>,
-            <Link to="/">
-              <HeartOutlined className="text-info" />
-              <br />
-              Add To WishList
-            </Link>,
-            <RatingModal>
-              <StarRatings
-                name={product._id}
-                numberOfStars={5}
-                rating={star}
-                changeRating={onStarClick}
-                isSelectable={true}
-                starRatedColor="red"
-              />
-            </RatingModal>,
-          ]}
+          actions={actions()}
         >
           <ShowProductDetails product={product} />
         </Card>

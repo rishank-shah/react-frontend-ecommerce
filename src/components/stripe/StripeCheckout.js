@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { useSelector, useDispatch } from 'react-redux'
 import { createPaymentIntent } from "../../api/ServerStripe";
+import { createUserOrder } from "../../api/ServerOrder";
+import { deleteUserCart } from '../../api/ServerUser'
 import { Link } from 'react-router-dom'
 import { Card } from 'antd'
 import { DollarOutlined, CheckOutlined } from '@ant-design/icons'
@@ -68,6 +70,23 @@ const StripeCheckout = ({ history }) => {
       setError(`Payment Failed ${payload.error.message}`)
       setProcessing(false)
     } else {
+      createUserOrder(user.token, payload)
+        .then((res) => {
+          if (res.data.success) {
+            if (typeof window !== "undefined") {
+              localStorage.removeItem("user_product_cart")
+            }
+            dispatch({
+              type: "ADD_TO_CART",
+              payload: []
+            })
+            dispatch({
+              type: "COUPON_USED",
+              payload: false
+            })
+            deleteUserCart(user.token)
+          }
+        })
       setProcessing(false)
       setError(null)
       setSuccess(true)
