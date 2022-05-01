@@ -4,6 +4,8 @@ import { getUserOrders } from '../../api/ServerOrder'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import ShowPaymentInformation from '../../components/cards/ShowPaymentInformation'
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import InvoicePDF from '../../components/order/InvoicePDF'
 
 const History = () => {
 
@@ -52,14 +54,27 @@ const History = () => {
 		)
 	}
 
+	const showPDFDownloadLink = (order) => {
+		console.log(order)
+		return (
+			<PDFDownloadLink
+				document={<InvoicePDF order={order} />}
+				fileName={`INVOICE-${order._id}-${order.paymentIntent.id}.pdf`}
+				className="btn btn-sm btn-block btn-outline-primary"
+			>
+				Download PDF
+			</PDFDownloadLink>
+		)
+	}
+
 	const showOrdersTable = () => {
 		return userOrders.map((order, i) => (
 			<div key={i} className="card p-5 m-5" >
-				<ShowPaymentInformation paymentIntent={order.paymentIntent} orderStatus = {order.orderStatus} />
+				<ShowPaymentInformation paymentIntent={order.paymentIntent} orderStatus={order.orderStatus} />
 				{showOrderProducts(order.products)}
 				<div className="row">
 					<div className="col">
-						<p>PDF Download</p>
+						{showPDFDownloadLink(order)}
 					</div>
 				</div>
 			</div>
