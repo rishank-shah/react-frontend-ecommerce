@@ -11,6 +11,9 @@ import RatingModal from "../modals/RatingModal";
 import { showAverageRatingFunction } from "../../functions/rating";
 import { useSelector, useDispatch } from "react-redux";
 import _ from "lodash";
+import { saveUserWishlist } from "../../api/ServerUser";
+import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 
 const { TabPane } = Tabs;
 
@@ -18,6 +21,8 @@ const ProductDetail = ({ product, onStarClick, star }) => {
   const { images, title, description } = product;
 
   const [tooltip, setToolTip] = useState("Click to add product in cart");
+
+  let history = useHistory();
 
   const dispatch = useDispatch();
   const { user, cart } = useSelector((state) => ({ ...state }));
@@ -48,6 +53,19 @@ const ProductDetail = ({ product, onStarClick, star }) => {
     }
   };
 
+  const addToWishList = (e) => {
+    e.preventDefault()
+    saveUserWishlist(user.token, product._id)
+      .then((res) => {
+        if (res.data.success) {
+          toast.success("Saved to wishlist")
+          history.push('/user/wishlist')
+        } else {
+          toast.error("Something went wrong when adding to wishlist")
+        }
+      })
+  }
+
   const actions = () => {
     if (product.quantity < 1) {
       return [
@@ -58,11 +76,11 @@ const ProductDetail = ({ product, onStarClick, star }) => {
             Cannot add to cart
           </Tooltip>
         </>,
-        <Link to="/">
+        <a onClick={addToWishList}>
           <HeartOutlined className="text-info" />
           <br />
           Add To WishList
-        </Link>,
+        </a>,
         <RatingModal>
           <StarRatings
             name={product._id}
@@ -85,11 +103,11 @@ const ProductDetail = ({ product, onStarClick, star }) => {
             </a>
           </Tooltip>
         </>,
-        <Link to="/">
+        <a onClick={addToWishList}>
           <HeartOutlined className="text-info" />
           <br />
           Add To WishList
-        </Link>,
+        </a>,
         <RatingModal>
           <StarRatings
             name={product._id}

@@ -1,6 +1,10 @@
 import React from 'react'
 
-const ShowPaymentInformation = ({ paymentIntent, orderStatus }) => {
+const ShowPaymentInformation = ({
+  paymentIntent,
+  orderStatus,
+  showStatus = true
+}) => {
   return (
     <div>
       <p>
@@ -20,14 +24,19 @@ const ShowPaymentInformation = ({ paymentIntent, orderStatus }) => {
         <span>
           Ordered On: {new Date(paymentIntent.created * 1000).toLocaleString()}
         </span>
-        <br />
-        <span>
-          Order Status:
-          <span className="badge bg-primary" >
-            {orderStatus}
-          </span>
-        </span>
-
+        {
+          showStatus && (
+            <>
+              <br />
+              <span>
+                Order Status:
+                <span className="badge bg-primary" >
+                  {orderStatus}
+                </span>
+              </span>
+            </>
+          )
+        }
       </p>
     </div>
   )

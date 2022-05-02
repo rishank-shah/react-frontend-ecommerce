@@ -17,3 +17,22 @@ export const getUserOrders = async (authtoken) => {
     },
   });
 };
+
+export const getAllOrders = async (authtoken) => {
+  return await axios.get(`${process.env.REACT_APP_API_URL}/admin/orders`, {
+    headers: {
+      authtoken: authtoken,
+    },
+  });
+}
+
+export const updateOrderStatus = async (authtoken, orderID, orderStatus) => {
+  return await axios.put(`${process.env.REACT_APP_API_URL}/admin/order-status`, {
+    orderID,
+    orderStatus,
+  }, {
+    headers: {
+      authtoken: authtoken,
+    },
+  });
+};

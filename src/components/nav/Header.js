@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Menu, Badge } from "antd";
 import {
@@ -23,6 +23,18 @@ const Header = () => {
   let dispatch = useDispatch();
   let history = useHistory();
   let { user, cart } = useSelector((state) => ({ ...state }));
+
+  useEffect(() => {
+    history.listen((location) => {
+      if (location.pathname === '/all-products/shop') {
+        setCurrent("shop")
+      } else if (location.pathname === '/') {
+        setCurrent("home")
+      } else if (location.pathname === '/user/cart') {
+        setCurrent("cart")
+      }
+    })
+  }, [history])
 
   const handleClick = (event) => {
     setCurrent(event.key);
