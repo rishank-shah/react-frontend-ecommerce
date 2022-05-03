@@ -1,39 +1,42 @@
-import React, { useEffect } from "react";
+import React, { useEffect, lazy, Suspense } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Switch, Route } from "react-router-dom";
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import Home from "./pages/Home";
-import Header from "./components/nav/Header";
-import RegisterComplete from "./pages/auth/RegisterComplete";
 import { auth } from "./firebase";
 import { useDispatch } from "react-redux";
-import ForgotPassword from "./pages/auth/ForgotPassword";
+
 import { currentUser } from "./api/ServerAuth";
-import History from "./pages/user/History";
-import Password from "./pages/user/Password";
-import Wishlist from "./pages/user/Wishlist";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import PrivateUserRoutes from "./components/routes/PrivateUserRoutes";
-import PrivateAdminRoutes from "./components/routes/PrivateAdminRoutes";
-import CreateCategory from "./pages/admin/category/CreateCategory";
-import UpdateCategory from "./pages/admin/category/UpdateCategory";
-import CreateSubCat from "./pages/admin/subCategory/CreateSubCat";
-import UpdateSubCat from "./pages/admin/subCategory/UpdateSubCat";
-import CreateProduct from "./pages/admin/product/CreateProduct";
-import ViewProducts from "./pages/admin/product/ViewProducts";
-import UpdateProduct from "./pages/admin/product/UpdateProduct";
-import Product from "./pages/Product";
-import CategoryHome from "./pages/category/CategoryHome";
-import SubCategoryHome from "./pages/subcategory/SubCategoryHome";
-import UpdatePassword from "./pages/admin/UpdatePassword";
-import AllProductsShop from "./pages/AllProductsShop";
-import UserCart from "./pages/UserCart";
-import CartSideDrawer from "./components/drawer/CartSideDrawer";
-import CartCheckout from "./pages/CartCheckout";
-import CreateCoupon from "./pages/admin/coupon/CreateCoupon";
-import Payment from "./pages/Payment";
+import { LoadingOutlined } from '@ant-design/icons'
+
+const Login = lazy(() => import("./pages/auth/Login"));
+const Register = lazy(() => import("./pages/auth/Register"));
+const Home = lazy(() => import("./pages/Home"));
+const Header = lazy(() => import("./components/nav/Header"));
+const RegisterComplete = lazy(() => import("./pages/auth/RegisterComplete"));
+const ForgotPassword = lazy(() => import("./pages/auth/ForgotPassword"));
+const History = lazy(() => import("./pages/user/History"));
+const Password = lazy(() => import("./pages/user/Password"));
+const Wishlist = lazy(() => import("./pages/user/Wishlist"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const PrivateUserRoutes = lazy(() => import("./components/routes/PrivateUserRoutes"));
+const PrivateAdminRoutes = lazy(() => import("./components/routes/PrivateAdminRoutes"));
+const CreateCategory = lazy(() => import("./pages/admin/category/CreateCategory"));
+const UpdateCategory = lazy(() => import("./pages/admin/category/UpdateCategory"));
+const CreateSubCat = lazy(() => import("./pages/admin/subCategory/CreateSubCat"));
+const UpdateSubCat = lazy(() => import("./pages/admin/subCategory/UpdateSubCat"));
+const CreateProduct = lazy(() => import("./pages/admin/product/CreateProduct"));
+const ViewProducts = lazy(() => import("./pages/admin/product/ViewProducts"));
+const UpdateProduct = lazy(() => import("./pages/admin/product/UpdateProduct"));
+const Product = lazy(() => import("./pages/Product"));
+const CategoryHome = lazy(() => import("./pages/category/CategoryHome"));
+const SubCategoryHome = lazy(() => import("./pages/subcategory/SubCategoryHome"));
+const UpdatePassword = lazy(() => import("./pages/admin/UpdatePassword"));
+const AllProductsShop = lazy(() => import("./pages/AllProductsShop"));
+const UserCart = lazy(() => import("./pages/UserCart"));
+const CartSideDrawer = lazy(() => import("./components/drawer/CartSideDrawer"));
+const CartCheckout = lazy(() => import("./pages/CartCheckout"));
+const CreateCoupon = lazy(() => import("./pages/admin/coupon/CreateCoupon"));
+const Payment = lazy(() => import("./pages/Payment"));
 
 const App = () => {
   const dispatch = useDispatch();
@@ -64,7 +67,11 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <>
+    <Suspense fallback={
+      <div className="container col text-center p-5" >
+        Mern Ecommerce Loading ... <LoadingOutlined />
+      </div>
+    } >
       <Header />
       <CartSideDrawer />
       <ToastContainer />
@@ -154,9 +161,9 @@ const App = () => {
           path="/payment"
           component={Payment}
         />
-        
+
       </Switch>
-    </>
+    </Suspense>
   );
 };
 
